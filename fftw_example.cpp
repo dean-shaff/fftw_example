@@ -3,7 +3,8 @@
 #include <cmath>
 #include <string>
 #include <fstream>
-#include <fftw3.h>
+// #include <fftw3.h>
+#include "fftw3.h"
 
 const double PI = 3.14 ;
 
