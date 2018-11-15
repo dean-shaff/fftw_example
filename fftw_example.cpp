@@ -22,12 +22,15 @@ void write_complex_to_csv(const char * file_name, fftw_complex * arr, int size) 
 }
 
 int main () {
-    int N = 512;
-    double freq = 1.0;
+    int N = 256;
+    double freq = 5.0;
+    // double freq1 = static_cast<double>(N / 2);
+    double freq1 = 200;
+    printf("freq: %f, freq1: %f\n", freq, freq1);
     // vector<double> freq_range(2);
     // freq_range[0] = 0;
     // freq_range[1] = PI;
-    double delta = PI - 0.0;
+    double delta = 2.0*PI - 0.0;
     // double delta = 1.0;
     fftw_complex *in, *out;
     fftw_plan p;
@@ -36,8 +39,8 @@ int main () {
     out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
     double k ;
     for (int i=0; i<N; i++){
-        k = static_cast<double>(i) / delta ;
-        in[i][0] = sin(freq * k);
+        k = static_cast<double>(i) * (delta / N) ;
+        in[i][0] = sin(freq * k) + sin(freq1 * k);
         in[i][1] = 0.0;
     }
     p = fftw_plan_dft_1d(N, in, out, FFTW_FORWARD, FFTW_ESTIMATE);

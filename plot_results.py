@@ -16,11 +16,21 @@ def read_data(file_path):
 
 
 def main():
+
     fig, axs = plt.subplots(2, 1)
     in_data, out_data = [read_data(n) for n in files]
-    axs[0].plot(in_data[:, 0])
-    axs[1].plot(out_data[:, 0])
 
+    in_data = in_data[:, 0] + 1j* in_data[:, 1]
+    out_data = out_data[:, 0] + 1j* out_data[:, 1]
+
+    axs[0].plot(np.real(in_data))
+    # axs[1].plot((np.abs(out_data)**2)[255:][::-1])
+    axs[1].plot((np.abs(out_data)**2)[:out_data.shape[0]//2])
+    # axs[2].plot(np.angle(out_data))
+    axs[1].set_xlabel("samples")
+    # axs[2].set_xlabel("samples")
+
+    fig.tight_layout()
     plt.show()
 
 if __name__ == "__main__":
