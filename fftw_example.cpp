@@ -3,37 +3,22 @@
 #include <cmath>
 #include <string>
 #include <fstream>
-// #include <fftw3.h>
 #include "fftw3.h"
+#include "csv.hpp"
 
 const double PI = 3.14 ;
 
 using namespace std;
 
-void write_complex_to_csv(const char * file_name, fftw_complex * arr, int size) {
-    ofstream f;
-  	f.open(file_name);
-    for (int i=0; i<size; i++) {
-        f << to_string(arr[i][0]);
-        f << ",";
-        f << to_string(arr[i][1]);
-        f << "\n";
-    }
-    f.close();
-}
 
 int main () {
     int N = 256;
     double freq = 5.0;
-    // double freq1 = static_cast<double>(N / 2);
     double freq1 = 200;
     printf("freq: %f, freq1: %f\n", freq, freq1);
-    // vector<double> freq_range(2);
-    // freq_range[0] = 0;
-    // freq_range[1] = PI;
     double delta = 2.0*PI - 0.0;
-    // double delta = 1.0;
-    fftw_complex *in, *out;
+
+	fftw_complex *in, *out;
     fftw_plan p;
 
     in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
@@ -48,8 +33,15 @@ int main () {
 
     fftw_execute(p);
 
-    write_complex_to_csv("in.csv", in, N);
-    write_complex_to_csv("out.csv", out, N);
+	ofstream fin; fin.open("in.csv");
+	ofstream fout; fout.open("out.csv");
+
+	for (int i=0; i<N; i++) {
+		csv::write_row<double>(fin, in[i], 2);
+		csv::write_row<double>(fout, out[i], 2);
+	}
+	fin.close();
+	fout.close();
 
     fftw_destroy_plan(p);
     fftw_free(in);
